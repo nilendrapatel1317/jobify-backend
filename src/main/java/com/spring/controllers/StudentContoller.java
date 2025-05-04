@@ -14,9 +14,9 @@ import jakarta.validation.Valid;
 
 import com.spring.response.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/student")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StudentContoller {
 
 	@Autowired

@@ -150,13 +150,11 @@ public class Student {
 		this.isLogedIn = isLogedIn;
 	} 
 
-	
-
 }
 
 @Embeddable
 class Avatar {
-	private String fileId = "";
+	private String fileId = "abc123";
 	private String url = "https://images.unsplash.com/photo-1682685797886-79020b7462a4";
 
 	public String getFileId() {

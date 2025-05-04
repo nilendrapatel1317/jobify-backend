@@ -88,7 +88,6 @@ public class StudentServiceImplementation implements StudentService {
 	@Override
 	public Student register(Student student) {
 		student.setId(generateID());
-		student.setLogedIn(true);
 		return studentRepository.save(student);
 	}
 

@@ -7,37 +7,53 @@ import java.util.List;
 @Entity
 public class Employee {
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @Size(min = 3, message = "First name must be more than 3 characters")
-    private String firstname;
+	@Size(min = 3, message = "First name must be more than 3 characters")
+	private String firstname;
 
-    @Size(min = 3, max = 10, message = "Last name must be between 3 and 10 characters")
-    private String lastname;
+	@Size(min = 3, max = 10, message = "Last name must be between 3 and 10 characters")
+	private String lastname;
 
-    @Size(min = 10, max = 10, message = "Contact must be 10 digits")
-    private String contact;
+	@Size(min = 10, max = 10, message = "Contact must be 10 digits")
+	private String contact;
 
-    @Email(message = "Please provide a valid email")
-    @Column(unique = true)
-    private String email;
+	@Size(min = 3, max = 10, message = "City must be between 3 and 10 characters")
+	private String city;
 
-//    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be more than 6 characters")
-    private String password;
+	@Pattern(regexp = "Male|Female|Others", message = "Gender must be Male, Female, or Others")
+	private String gender;
 
-    @Size(min = 4, message = "Organization name must be more than 4 characters")
-    private String organizationName;
+	@Email(message = "Please provide a valid email")
+	@Column(unique = true)
+	private String email;
 
-    @Embedded
-    private OrganizationLogo organizationLogo = new OrganizationLogo();
+	// @NotBlank(message = "Password is required")
+	@Size(min = 6, message = "Password must be more than 6 characters")
+	private String password;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Internship> internships; // Stores ObjectIds as strings
+	@Size(min = 4, message = "Organization name must be more than 4 characters")
+	private String organizationName;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<Job> jobs;
+	@Embedded
+	private OrganizationLogo organizationLogo = new OrganizationLogo();
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+	private List<Internship> internships; // Stores ObjectIds as strings
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+	private List<Job> jobs;
+
+	private boolean isLogedIn = false;
+
+	public boolean isLogedIn() {
+		return isLogedIn;
+	}
+
+	public void setLogedIn(boolean isLogedIn) {
+		this.isLogedIn = isLogedIn;
+	}
 
 	public String getId() {
 		return id;
@@ -71,6 +87,22 @@ public class Employee {
 		this.contact = contact;
 	}
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
 	public String getEmail() {
 		return email;
 	}
@@ -118,16 +150,15 @@ public class Employee {
 	public void setJobs(List<Job> jobs) {
 		this.jobs = jobs;
 	}
-   
-}
 
+}
 
 @Embeddable
 class OrganizationLogo {
 
-    private String fileId = "";
+	private String fileId = "abc123";
 
-    private String url = "https://images.unsplash.com/photo-1682685797886-79020b7462a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60";
+	private String url = "https://images.unsplash.com/photo-1682685797886-79020b7462a4";
 
 	public String getFileId() {
 		return fileId;
