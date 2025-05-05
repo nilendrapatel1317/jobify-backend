@@ -1,6 +1,8 @@
 package com.spring.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -154,22 +156,28 @@ public class StudentContoller {
 	}
 
 	// Submit new password
-	@PostMapping("/forgetpassword/{id}")
-	public ResponseEntity<ResponseStructure<Student>> updatePassword(@PathVariable String id,
-			@RequestParam String currentPassword, @RequestBody Student student) {
+	@PostMapping("/changepassword/{id}")
+	public ResponseEntity<ResponseStructure<Object>> updatePassword(@PathVariable String id,
+			@RequestParam String currentPassword, @Valid @RequestBody Student student) {
 
-		int status = studentService.forgetPassword(id, currentPassword, student);
+		int status = studentService.changePassword(id, currentPassword, student);
 
-		ResponseStructure<Student> response = new ResponseStructure<>();
+		ResponseStructure<Object> response = new ResponseStructure<>();
 
 		if (status == 1) {
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMsg("Password updated successfully");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else if (status == -1) {
-			response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-			response.setMsg("Current password is incorrect");
-			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			Map<String, String> errorData = new HashMap<>();
+	        errorData.put("currentPassword", "Current Password is incorrect");
+	        errorData.put("newPassword", "Password must be more than 6 characters");
+
+	        response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+	        response.setMsg("Validation failed");
+	        response.setData(errorData);
+
+	        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
 			response.setMsg("Student not found");

@@ -22,7 +22,7 @@ public interface StudentService {
 	
 	public boolean logout(String id);
 	
-	public int forgetPassword(String id,String currentPassword,Student student);
+	public int changePassword(String id,String currentPassword,Student student);
 	
 	public List<Internship> getAllInternship();
 	

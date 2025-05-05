@@ -115,7 +115,7 @@ public class StudentServiceImplementation implements StudentService {
 	}
 
 	@Override
-	public int forgetPassword(String id, String currentPassword, Student newStudent) {
+	public int changePassword(String id, String currentPassword, Student newStudent) {
 		Student oldStudent = studentRepository.findById(id).orElse(null);
 
 		if (oldStudent != null) {

@@ -37,6 +37,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 			oldData.setContact(newData.getContact());
 			oldData.setCity(newData.getCity());
 			oldData.setGender(newData.getGender());
+			oldData.setOrganizationName(newData.getOrganizationName());
 
 			return employeeRepository.save(oldData);
 		} else {
