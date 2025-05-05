@@ -135,17 +135,11 @@ public class Employee {
 		this.organizationLogo = organizationLogo;
 	}
 
-	public List<Internship> getInternships() {
-		return internships;
-	}
 
 	public void setInternships(List<Internship> internships) {
 		this.internships = internships;
 	}
 
-	public List<Job> getJobs() {
-		return jobs;
-	}
 
 	public void setJobs(List<Job> jobs) {
 		this.jobs = jobs;
