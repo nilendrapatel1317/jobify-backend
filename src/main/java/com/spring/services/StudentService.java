@@ -23,13 +23,7 @@ public interface StudentService {
 	public boolean logout(String id);
 	
 	public int changePassword(String id,String currentPassword,Student student);
-	
-	public List<Internship> getAllInternship();
-	
-	public Internship addInternship(Internship internship);
-	
-	public List<Job> getAllJob();
-	
-	public Job addJob(Job job);	
+
+	public boolean applyInternship(String studentId, String internId);	
 	
 }

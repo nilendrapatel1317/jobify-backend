@@ -74,6 +74,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 			logedInEmployee.setLogedIn(true);
 			employeeRepository.save(logedInEmployee);
 
+			System.out.println(logedInEmployee);
 			return logedInEmployee;
 		} else {
 			return null;

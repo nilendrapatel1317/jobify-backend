@@ -1,6 +1,7 @@
 package com.spring.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.models.Internship;
+import com.spring.models.Student;
 import com.spring.response.ResponseStructure;
 import com.spring.services.InternshipService;
 
@@ -117,6 +119,69 @@ public class InternshipController {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
 			response.setMsg("No Internship found with id : " + id);
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Apply for an internship
+	@PostMapping("/apply")
+	public ResponseEntity<?> applyInternship(@RequestBody Map<String, String> payload) {
+		String internshipId = payload.get("internshipId");
+		String studentId = payload.get("studentId");
+
+		int appliedStatus = internshipService.applyInternship(studentId, internshipId);
+
+		ResponseStructure<Student> response = new ResponseStructure<>();
+
+		if (appliedStatus == 1) {
+			response.setStatusCode(HttpStatus.OK.value());
+			response.setMsg("Successfully Applied !");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} else if (appliedStatus == 0) {
+			response.setStatusCode(HttpStatus.NOT_FOUND.value());
+			response.setMsg("You Already Applied !");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		} else if (appliedStatus == -1) {
+			response.setStatusCode(HttpStatus.NOT_FOUND.value());
+			response.setMsg("Internship or Student Not Found !");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		} else {
+			response.setStatusCode(HttpStatus.NOT_FOUND.value());
+			response.setMsg("Failed to Apply Internship !");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Apply for an internship
+	@PostMapping("/withdraw")
+	public ResponseEntity<?> withdrawInternship(@RequestBody Map<String, String> payload) {
+		String internshipId = payload.get("internshipId");
+		String studentId = payload.get("studentId");
+
+		int appliedStatus = internshipService.withdrawInternship(studentId, internshipId);
+
+		ResponseStructure<Student> response = new ResponseStructure<>();
+
+		switch (appliedStatus) {
+		case 1:
+			response.setStatusCode(HttpStatus.OK.value());
+			response.setMsg("Internship withdrawn successfully !");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+
+		case 0:
+			response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+			response.setMsg("You haven’t applied for this internship !");
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+		case -1:
+			response.setStatusCode(HttpStatus.NOT_FOUND.value());
+			response.setMsg("Internship or student details not found !");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
+		default:
+			response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			response.setMsg(
+					"Something went wrong while processing your withdrawal request. Please try again later.");
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

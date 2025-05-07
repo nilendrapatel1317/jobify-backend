@@ -194,9 +194,21 @@ public class StudentContoller {
 	}
 
 	// Apply for an internship
-	@GetMapping("/apply/internship/{id}")
-	public String applyInternship(@PathVariable String id) {
-		return "Applying for internship with ID: " + id;
+	@GetMapping("/apply/{internId}/{studentId}")
+	public ResponseEntity<ResponseStructure<?>> applyInternship(@PathVariable String internId,@PathVariable String studentId) {
+		boolean appliedStatus = studentService.applyInternship(studentId,internId);
+		
+		ResponseStructure<Student> response = new ResponseStructure<>();
+
+		if (appliedStatus) {
+			response.setStatusCode(HttpStatus.OK.value());
+			response.setMsg("Successfully Applied");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} else {
+			response.setStatusCode(HttpStatus.NOT_FOUND.value());
+			response.setMsg("Failed to Apply");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
 	}
 
 	// ============ JOB Section ================

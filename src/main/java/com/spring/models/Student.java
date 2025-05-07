@@ -2,7 +2,11 @@ package com.spring.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Student {
@@ -35,15 +39,19 @@ public class Student {
 	@Embedded
 	private Avatar avatar = new Avatar();
 
-	@OneToMany
-	private List<Internship> internships; 
+	@ManyToMany
+	@JoinTable(name = "student_internship", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "internship_id"))
+	@JsonIgnore
+	private List<Internship> internships = new ArrayList<>();
 
-	@OneToMany
+	@ManyToMany
+	@JoinTable(name = "student_job", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "job_id"))
+	@JsonIgnore
 	private List<Job> jobs;
-	
-	@OneToOne(mappedBy = "student" , cascade = CascadeType.ALL)
+
+	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
 	private Resume resume;
-	
+
 	private boolean isLogedIn = false;
 
 	public String getId() {
@@ -148,7 +156,20 @@ public class Student {
 
 	public void setLogedIn(boolean isLogedIn) {
 		this.isLogedIn = isLogedIn;
-	} 
+	}
+
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", contact=" + contact
+				+ ", city=" + city + ", gender=" + gender + ", email=" + email + ", password=" + password + ", avatar="
+				+ avatar + ", internships=" + internships + ", jobs=" + jobs + ", resume=" + resume + ", isLogedIn="
+				+ isLogedIn + ", getId()=" + getId() + ", getFirstname()=" + getFirstname() + ", getLastname()="
+				+ getLastname() + ", getContact()=" + getContact() + ", getCity()=" + getCity() + ", getGender()="
+				+ getGender() + ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", getAvatar()="
+				+ getAvatar() + ", getInternships()=" + getInternships() + ", getJobs()=" + getJobs() + ", getResume()="
+				+ getResume() + ", isLogedIn()=" + isLogedIn() + ", getClass()=" + getClass() + ", hashCode()="
+				+ hashCode() + ", toString()=" + super.toString() + "]";
+	}
 
 }
 

@@ -1,5 +1,6 @@
 package com.spring.services.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,19 +9,23 @@ import com.spring.exception.GlobalExceptionHandler;
 import com.spring.models.Internship;
 import com.spring.models.Job;
 import com.spring.models.Student;
+import com.spring.repository.InternshipRepository;
 import com.spring.repository.StudentRepository;
 import com.spring.services.StudentService;
 
 @Service
 public class StudentServiceImplementation implements StudentService {
 
+    private final InternshipRepository internshipRepository;
+
 	private final GlobalExceptionHandler globalExceptionHandler;
 
 	@Autowired
 	private StudentRepository studentRepository;
 
-	StudentServiceImplementation(GlobalExceptionHandler globalExceptionHandler) {
+	StudentServiceImplementation(GlobalExceptionHandler globalExceptionHandler, InternshipRepository internshipRepository) {
 		this.globalExceptionHandler = globalExceptionHandler;
+		this.internshipRepository = internshipRepository;
 	}
 
 	@Override
@@ -130,27 +135,29 @@ public class StudentServiceImplementation implements StudentService {
 	}
 
 	@Override
-	public List<Internship> getAllInternship() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean applyInternship(String studentId, String internId) {
+	    Internship internship = internshipRepository.findById(internId).orElse(null);
+	    Student student = studentRepository.findById(studentId).orElse(null);
+
+	    if (internship == null || student == null) {
+	        return false;
+	    }
+
+	    // Avoid duplicates
+	    if (!internship.getStudents().contains(student)) {
+	        internship.getStudents().add(student);
+	    }
+
+	    if (!student.getInternships().contains(internship)) {
+	        student.getInternships().add(internship);
+	    }
+	    
+	    studentRepository.save(student); 
+	    
+	    return true;
 	}
 
-	@Override
-	public Internship addInternship(Internship internship) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public List<Job> getAllJob() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public Job addJob(Job job) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.spring.exception.GlobalExceptionHandler;
 import com.spring.models.Internship;
+import com.spring.models.Student;
 import com.spring.repository.InternshipRepository;
+import com.spring.repository.StudentRepository;
 import com.spring.services.InternshipService;
 
 @Service
@@ -16,7 +18,10 @@ public class InternshipServiceImplementation implements InternshipService {
 	private final GlobalExceptionHandler globalExceptionHandler;
 
 	@Autowired
-	private InternshipRepository InternshipRepository;
+	private InternshipRepository internshipRepository;
+
+	@Autowired
+	private StudentRepository studentRepository;
 
 	InternshipServiceImplementation(GlobalExceptionHandler globalExceptionHandler) {
 		this.globalExceptionHandler = globalExceptionHandler;
@@ -24,18 +29,18 @@ public class InternshipServiceImplementation implements InternshipService {
 
 	@Override
 	public List<Internship> getAllInternships() {
-		return InternshipRepository.findAll();
+		return internshipRepository.findAll();
 	}
 
 	@Override
 	public Internship getInternshipById(String id) {
-		return InternshipRepository.findById(id).orElse(null);
+		return internshipRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Internship updateById(String id, Internship newData) {
-		if (InternshipRepository.existsById(id)) {
-			Internship oldData = InternshipRepository.findById(id).orElse(null);
+		if (internshipRepository.existsById(id)) {
+			Internship oldData = internshipRepository.findById(id).orElse(null);
 			oldData.setProfile(newData.getProfile());
 			oldData.setOpenings(newData.getOpenings());
 			oldData.setStipendAmount(newData.getStipendAmount());
@@ -48,8 +53,8 @@ public class InternshipServiceImplementation implements InternshipService {
 			oldData.setPerks(newData.getPerks());
 			oldData.setAssesments(newData.getAssesments());
 			oldData.setInternshipType(newData.getInternshipType());
-			
-			return InternshipRepository.save(oldData);
+
+			return internshipRepository.save(oldData);
 		} else {
 			return null;
 		}
@@ -58,8 +63,8 @@ public class InternshipServiceImplementation implements InternshipService {
 	@Override
 	public boolean deleteById(String id) {
 		boolean flag = false;
-		if (InternshipRepository.existsById(id)) {
-			InternshipRepository.deleteById(id);
+		if (internshipRepository.existsById(id)) {
+			internshipRepository.deleteById(id);
 			flag = true;
 		} else {
 			flag = false;
@@ -67,19 +72,69 @@ public class InternshipServiceImplementation implements InternshipService {
 		return flag;
 	}
 
-	
-
 	@Override
 	public Internship create(Internship internship) {
 		internship.setId(generateID());
-		return InternshipRepository.save(internship);
+		return internshipRepository.save(internship);
 	}
 
 	private String generateID() {
-		String lastIdStr = InternshipRepository.findLastId().orElse("INT@100");
+		String lastIdStr = internshipRepository.findLastId().orElse("INT@100");
 		int lastNum = Integer.parseInt(lastIdStr.split("@")[1]);
 		String newId = "INT@" + (lastNum + 1);
 		return newId;
+	}
+
+	@Override
+	public int applyInternship(String studentId, String internshipId) {
+		Internship internship = internshipRepository.findById(internshipId).orElse(null);
+		Student student = studentRepository.findById(studentId).orElse(null);
+
+		if (internship == null || student == null) {
+			return -1;
+		} else if (internship.getStudents().contains(student) || student.getInternships().contains(internship)) {
+			return 0;
+		} else {
+			// Avoid duplicates
+			if (!internship.getStudents().contains(student)) {
+				internship.getStudents().add(student);
+			}
+
+			if (!student.getInternships().contains(internship)) {
+				student.getInternships().add(internship);
+			}
+
+			studentRepository.save(student);
+
+			return 1;
+		}
+
+	}
+
+	@Override
+	public int withdrawInternship(String studentId, String internshipId) {
+		Internship internship = internshipRepository.findById(internshipId).orElse(null);
+		Student student = studentRepository.findById(studentId).orElse(null);
+
+		if (internship == null || student == null) {
+			return -1;
+		} else if (!internship.getStudents().contains(student) || !student.getInternships().contains(internship)) {
+			return 0;
+		} else {
+			// Avoid duplicates
+			if (internship.getStudents().contains(student)) {
+				internship.getStudents().remove(student);
+			}
+
+			if (student.getInternships().contains(internship)) {
+				student.getInternships().remove(internship);
+			}
+
+			studentRepository.save(student);
+
+			return 1;
+		}
+
 	}
 
 }

@@ -8,59 +8,62 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Internship {
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @ManyToOne
-    private Employee employee;
+	@ManyToOne
+	private Employee employee;
 
-    @ManyToMany(mappedBy = "internships")
-    private List<Student> students;
+	@ManyToMany(mappedBy = "internships")
+    private List<Student> students = new ArrayList<>();
 
-    @Size(min = 5, message = "Profile name must be more than 5 characters")
-    private String profile;
+	@Size(min = 5, message = "Profile name must be more than 5 characters")
+	private String profile;
 
-    @Size(min = 1, message = "At least one skill is required")
-    private List<String> skills;
+	@Size(min = 1, message = "At least one skill is required")
+	private List<String> skills;
 
-    @Pattern(regexp = "Onsite|Remote|Hybrid", message = "Select any one Internship Type")
+	@Pattern(regexp = "Onsite|Remote|Hybrid", message = "Select any one Internship Type")
 	private String internshipType;
 
-    @Min(value = 1, message = "Openings must be at least 1")
-    private int openings;
+	@Min(value = 1, message = "Openings must be at least 1")
+	private int openings;
 
-    @NotBlank(message = "From date is required")
-    private String fromDate;
+	@NotBlank(message = "From date is required")
+	private String fromDate;
 
-    @NotBlank(message = "To date is required")
-    private String toDate;
+	@NotBlank(message = "To date is required")
+	private String toDate;
 
-    @NotBlank(message = "Duration is required")
-    private String duration;
+	@NotBlank(message = "Duration is required")
+	private String duration;
 
-    @Size(min = 1, message = "At least one responsibility is required")
-    private List<String> responsibility;
-    
-    @Pattern(regexp = "Fixed|Negotiable|Performance_Based|Unpaid", message = "Select any one Stipend Status")
+	@Size(min = 1, message = "At least one responsibility is required")
+	private List<String> responsibility;
+
+	@Pattern(regexp = "Fixed|Negotiable|Performance_Based|Unpaid", message = "Select any one Stipend Status")
 	private String stipendStatus;
 
-    @DecimalMin(value = "0.0", inclusive = true, message = "Stipend amount cannot be negative")
-    private Double stipendAmount;
+	@DecimalMin(value = "0.0", inclusive = true, message = "Stipend amount cannot be negative")
+	private Double stipendAmount;
 
-    @Size(min = 1, message = "At least one perk is required")
-    private List<String> perks;
+	@Size(min = 1, message = "At least one perk is required")
+	private List<String> perks;
 
-    @Size(min = 1, message = "At least one assessments is required")
-    private List<String> assesments;
+	@Size(min = 1, message = "At least one assessments is required")
+	private List<String> assesments;
 
-    // ===== Getters and Setters =====
+	// ===== Getters and Setters =====
 
-    public String getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -180,7 +183,13 @@ public class Internship {
 		this.assesments = assesments;
 	}
 
-	
-	
-	
+	@Override
+	public String toString() {
+		return "Internship [id=" + id + ", employee=" + employee + ", profile=" + profile
+				+ ", skills=" + skills + ", internshipType=" + internshipType + ", openings=" + openings + ", fromDate="
+				+ fromDate + ", toDate=" + toDate + ", duration=" + duration + ", responsibility=" + responsibility
+				+ ", stipendStatus=" + stipendStatus + ", stipendAmount=" + stipendAmount + ", perks=" + perks
+				+ ", assesments=" + assesments + "]";
+	}
+
 }
