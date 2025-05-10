@@ -111,7 +111,7 @@ public class StudentContoller {
 		Student logedInStudent = studentService.login(student);
 
 		ResponseStructure<Student> response = new ResponseStructure<>();
-
+ 
 		if (logedInStudent != null) {
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMsg("Login successfully");

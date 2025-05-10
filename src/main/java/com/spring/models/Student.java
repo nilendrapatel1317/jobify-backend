@@ -47,7 +47,7 @@ public class Student {
 	@ManyToMany
 	@JoinTable(name = "student_job", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "job_id"))
 	@JsonIgnore
-	private List<Job> jobs;
+	private List<Job> jobs = new ArrayList<>();
 
 	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
 	private Resume resume;
@@ -158,25 +158,12 @@ public class Student {
 		this.isLogedIn = isLogedIn;
 	}
 
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", contact=" + contact
-				+ ", city=" + city + ", gender=" + gender + ", email=" + email + ", password=" + password + ", avatar="
-				+ avatar + ", internships=" + internships + ", jobs=" + jobs + ", resume=" + resume + ", isLogedIn="
-				+ isLogedIn + ", getId()=" + getId() + ", getFirstname()=" + getFirstname() + ", getLastname()="
-				+ getLastname() + ", getContact()=" + getContact() + ", getCity()=" + getCity() + ", getGender()="
-				+ getGender() + ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", getAvatar()="
-				+ getAvatar() + ", getInternships()=" + getInternships() + ", getJobs()=" + getJobs() + ", getResume()="
-				+ getResume() + ", isLogedIn()=" + isLogedIn() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + ", toString()=" + super.toString() + "]";
-	}
-
 }
 
 @Embeddable
 class Avatar {
 	private String fileId = "abc123";
-	private String url = "https://images.unsplash.com/photo-1682685797886-79020b7462a4";
+	private String url = "https://imgs.search.brave.com/r15no1x_gICbvbgUn7cLGtpgrg6eRxqovZETya8spuQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cGhvdG9wZWEuY29t/L2ltZy90YWJsZS53/ZWJw";
 
 	public String getFileId() {
 		return fileId;

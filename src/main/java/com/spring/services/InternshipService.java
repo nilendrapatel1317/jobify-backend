@@ -19,5 +19,9 @@ public interface InternshipService {
 	public int applyInternship(String studentId, String internshipId);
 
 	public int withdrawInternship(String studentId, String internshipId);
+
+	public Internship activeInternship(String id);
+
+	public Internship deActiveInternship(String id);
 		
 }

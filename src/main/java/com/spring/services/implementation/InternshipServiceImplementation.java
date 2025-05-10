@@ -15,17 +15,12 @@ import com.spring.services.InternshipService;
 @Service
 public class InternshipServiceImplementation implements InternshipService {
 
-	private final GlobalExceptionHandler globalExceptionHandler;
 
 	@Autowired
 	private InternshipRepository internshipRepository;
 
 	@Autowired
 	private StudentRepository studentRepository;
-
-	InternshipServiceImplementation(GlobalExceptionHandler globalExceptionHandler) {
-		this.globalExceptionHandler = globalExceptionHandler;
-	}
 
 	@Override
 	public List<Internship> getAllInternships() {
@@ -51,7 +46,7 @@ public class InternshipServiceImplementation implements InternshipService {
 			oldData.setSkills(newData.getSkills());
 			oldData.setResponsibility(newData.getResponsibility());
 			oldData.setPerks(newData.getPerks());
-			oldData.setAssesments(newData.getAssesments());
+			oldData.setAssessments(newData.getAssessments());
 			oldData.setInternshipType(newData.getInternshipType());
 
 			return internshipRepository.save(oldData);
@@ -104,6 +99,7 @@ public class InternshipServiceImplementation implements InternshipService {
 				student.getInternships().add(internship);
 			}
 
+			internshipRepository.save(internship);
 			studentRepository.save(student);
 
 			return 1;
@@ -135,6 +131,32 @@ public class InternshipServiceImplementation implements InternshipService {
 			return 1;
 		}
 
+	}
+
+	@Override
+	public Internship activeInternship(String id) {
+		Internship internship = internshipRepository.findById(id).orElse(null);
+		if(internship != null) {
+			internship.setIsActive(true);
+			internshipRepository.save(internship);
+			return internship;
+		}
+		else {
+			return internship;
+		}
+	}
+
+	@Override
+	public Internship deActiveInternship(String id) {
+		Internship internship = internshipRepository.findById(id).orElse(null);
+		if(internship != null) {
+			internship.setIsActive(false);
+			internshipRepository.save(internship);
+			return internship;
+		}
+		else {
+			return internship;
+		}
 	}
 
 }

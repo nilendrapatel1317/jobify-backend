@@ -1,17 +1,19 @@
 package com.spring.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Internship {
@@ -23,7 +25,7 @@ public class Internship {
 	private Employee employee;
 
 	@ManyToMany(mappedBy = "internships")
-    private List<Student> students = new ArrayList<>();
+	private List<Student> students = new ArrayList<>();
 
 	@Size(min = 5, message = "Profile name must be more than 5 characters")
 	private String profile;
@@ -59,7 +61,17 @@ public class Internship {
 	private List<String> perks;
 
 	@Size(min = 1, message = "At least one assessments is required")
-	private List<String> assesments;
+	private List<String> assessments;
+
+	private boolean isActive;
+
+	private LocalDateTime postedAt;
+
+	@PrePersist
+	public void onCreate() {
+		this.postedAt = LocalDateTime.now();
+		this.isActive = true;
+	}
 
 	// ===== Getters and Setters =====
 
@@ -175,21 +187,27 @@ public class Internship {
 		this.perks = perks;
 	}
 
-	public List<String> getAssesments() {
-		return assesments;
+	public List<String> getAssessments() {
+		return assessments;
 	}
 
-	public void setAssesments(List<String> assesments) {
-		this.assesments = assesments;
+	public void setAssessments(List<String> assessments) {
+		this.assessments = assessments;
 	}
 
-	@Override
-	public String toString() {
-		return "Internship [id=" + id + ", employee=" + employee + ", profile=" + profile
-				+ ", skills=" + skills + ", internshipType=" + internshipType + ", openings=" + openings + ", fromDate="
-				+ fromDate + ", toDate=" + toDate + ", duration=" + duration + ", responsibility=" + responsibility
-				+ ", stipendStatus=" + stipendStatus + ", stipendAmount=" + stipendAmount + ", perks=" + perks
-				+ ", assesments=" + assesments + "]";
+	public boolean getIsActive() {
+		return isActive;
 	}
 
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public LocalDateTime getPostedAt() {
+		return postedAt;
+	}
+
+	public void setPostedAt(LocalDateTime postedAt) {
+		this.postedAt = postedAt;
+	}
 }

@@ -38,6 +38,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 			oldData.setCity(newData.getCity());
 			oldData.setGender(newData.getGender());
 			oldData.setOrganizationName(newData.getOrganizationName());
+			oldData.setOrganizationLogo(newData.getOrganizationLogo());
 
 			return employeeRepository.save(oldData);
 		} else {
@@ -47,7 +48,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
 	@Override
 	public boolean deleteById(String id) {
-		boolean flag = false;
+		boolean flag ;
 		if (employeeRepository.existsById(id)) {
 			employeeRepository.deleteById(id);
 			flag = true;
@@ -127,25 +128,21 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
 	@Override
 	public List<Internship> getAllInternship() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Internship addInternship(Internship internship) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Job> getAllJob() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Job addJob(Job job) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

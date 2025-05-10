@@ -15,120 +15,120 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.models.Internship;
+import com.spring.models.Job;
 import com.spring.models.Student;
 import com.spring.response.ResponseStructure;
-import com.spring.services.InternshipService;
+import com.spring.services.JobService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/internship")
+@RequestMapping("/job")
 @CrossOrigin(origins = "http://localhost:3000")
-public class InternshipController {
+public class JobController {
 
 	@Autowired
-	private InternshipService internshipService;
+	private JobService jobService;
 
-	// ============ Internship CRUD Operations =================
+	// ============ Job CRUD Operations =================
 
-	// View all Internships
+	// View all Jobs
 	@GetMapping("/all")
-	public ResponseEntity<ResponseStructure<List<Internship>>> viewAll() {
-		List<Internship> Internships = internshipService.getAllInternships();
-		System.out.println(Internships);
+	public ResponseEntity<ResponseStructure<List<Job>>> viewAll() {
+		List<Job> Jobs = jobService.getAllJobs();
+		System.out.println(Jobs);
 
-		ResponseStructure<List<Internship>> response = new ResponseStructure<>();
+		ResponseStructure<List<Job>> response = new ResponseStructure<>();
 
-		if (Internships != null && !Internships.isEmpty()) {
+		if (Jobs != null && !Jobs.isEmpty()) {
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internships fetched successfully");
-			response.setData(Internships);
+			response.setMsg("Jobs fetched successfully");
+			response.setData(Jobs);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("No Internships found");
+			response.setMsg("No Jobs found");
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// View a Internship by ID
+	// View a Job by ID
 	@GetMapping("/find/{id}")
-	public ResponseEntity<ResponseStructure<Internship>> viewCurrent(@PathVariable String id) {
-		Internship Internships = internshipService.getInternshipById(id);
+	public ResponseEntity<ResponseStructure<Job>> viewCurrent(@PathVariable String id) {
+		Job Jobs = jobService.getJobById(id);
 
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 
-		if (Internships != null) {
+		if (Jobs != null) {
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship fetched successfully");
-			response.setData(Internships);
+			response.setMsg("Job fetched successfully");
+			response.setData(Jobs);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("No Internship found with id : " + id);
+			response.setMsg("No Job found with id : " + id);
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// Internship registration
+	// Job registration
 	@PostMapping("/create")
-	public ResponseEntity<ResponseStructure<Internship>> register(@Valid @RequestBody Internship Internship) {
-		Internship savedInternship = internshipService.create(Internship);
+	public ResponseEntity<ResponseStructure<Job>> register(@Valid @RequestBody Job job) {
+		Job savedJob = jobService.create(job);
 
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 		response.setStatusCode(HttpStatus.CREATED.value());
-		response.setMsg("Internship Created Successfully");
-		response.setData(savedInternship);
+		response.setMsg("Job Created Successfully");
+		response.setData(savedJob);
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
-	// Update Internship details
+	// Update Job details
 	@PostMapping("/update/{id}")
-	public ResponseEntity<ResponseStructure<Internship>> updateById(@PathVariable String id,
-			@Valid @RequestBody Internship Internship) {
-		Internship updateInternship = internshipService.updateById(id, Internship);
+	public ResponseEntity<ResponseStructure<Job>> updateById(@PathVariable String id,
+			@Valid @RequestBody Job Job) {
+		Job updateJob = jobService.updateById(id, Job);
 
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 
-		if (updateInternship != null) {
+		if (updateJob != null) {
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship Updated successfully");
-			response.setData(updateInternship);
+			response.setMsg("Job Updated successfully");
+			response.setData(updateJob);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("No Internship found with id : " + id);
+			response.setMsg("No Job found with id : " + id);
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// Delete Internship account (dummy mapping here; use DELETE in real app)
+	// Delete Job account (dummy mapping here; use DELETE in real app)
 	@DeleteMapping("/{id}")
-	public ResponseEntity<ResponseStructure<Internship>> deleteByID(@PathVariable String id) {
-		boolean deleteStatus = internshipService.deleteById(id);
+	public ResponseEntity<ResponseStructure<Job>> deleteByID(@PathVariable String id) {
+		boolean deleteStatus = jobService.deleteById(id);
 
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 
 		if (deleteStatus) {
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship Delete successfully");
+			response.setMsg("Job Delete successfully");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("No Internship found with id : " + id);
+			response.setMsg("No Job found with id : " + id);
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// Apply for an internship
+	// Apply for an Job
 	@PostMapping("/apply")
-	public ResponseEntity<?> applyInternship(@RequestBody Map<String, String> payload) {
-		String internshipId = payload.get("internshipId");
+	public ResponseEntity<?> applyJob(@RequestBody Map<String, String> payload) {
+		String jobId = payload.get("jobId");
 		String studentId = payload.get("studentId");
 
-		int appliedStatus = internshipService.applyInternship(studentId, internshipId);
+		int appliedStatus = jobService.applyJob(studentId, jobId);
 
 		ResponseStructure<Student> response = new ResponseStructure<>();
 
@@ -142,67 +142,67 @@ public class InternshipController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		} else if (appliedStatus == -1) {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("Internship or Student Not Found !");
+			response.setMsg("Job or Student Not Found !");
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		} else {
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("Failed to Apply Internship !");
+			response.setMsg("Failed to Apply Job !");
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
 
-	// Apply for an internship
+	// Apply for an Job
 	@PostMapping("/withdraw")
-	public ResponseEntity<?> withdrawInternship(@RequestBody Map<String, String> payload) {
-		String internshipId = payload.get("internshipId");
+	public ResponseEntity<?> withdrawJob(@RequestBody Map<String, String> payload) {
+		String jobId = payload.get("jobId");
 		String studentId = payload.get("studentId");
 
-		int appliedStatus = internshipService.withdrawInternship(studentId, internshipId);
+		int appliedStatus = jobService.withdrawJob(studentId, jobId);
 
 		ResponseStructure<Student> response = new ResponseStructure<>();
 
 		switch (appliedStatus) {
 		case 1:
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship withdrawn successfully !");
+			response.setMsg("Job withdrawn successfully !");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 
 		case 0:
 			response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-			response.setMsg("You haven’t applied for this internship !");
+			response.setMsg("You haven’t applied for this Job !");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 
 		case -1:
 			response.setStatusCode(HttpStatus.NOT_FOUND.value());
-			response.setMsg("Internship or student details not found !");
+			response.setMsg("Job or student details not found !");
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 
 		default:
 			response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-			response.setMsg("Something went wrong while processing your withdrawal request. Please try again later.");
+			response.setMsg(
+					"Something went wrong while processing your withdrawal request. Please try again later.");
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
-
+	
 	@PostMapping("/activate")
-	public ResponseEntity<?> activateInternship(@RequestBody Map<String, String> payload) {
-		String internshipId = payload.get("internshipId");
+	public ResponseEntity<?> activateJob(@RequestBody Map<String, String> payload) {
+		String jobId = payload.get("jobId");
 
-		Internship activateStatus = internshipService.activeInternship(internshipId);
+		Job activateStatus = jobService.activeJob(jobId);
 
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 
 		if (activateStatus != null) {
 
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship Activated successfully !");
+			response.setMsg("Job Activated successfully !");
 			response.setData(activateStatus);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 
 			response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-			response.setMsg("Falied to activate internship !");
+			response.setMsg("Falied to activate job !");
 			response.setData(activateStatus);			
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
@@ -210,23 +210,23 @@ public class InternshipController {
 	}
 
 	@PostMapping("/deactivate")
-	public ResponseEntity<?> deActivateInternship(@RequestBody Map<String, String> payload) {
-		String internshipId = payload.get("internshipId");
+	public ResponseEntity<?> deActivateJob(@RequestBody Map<String, String> payload) {
+		String jobId = payload.get("jobId");
 		
-		Internship deActivateStatus = internshipService.deActiveInternship(internshipId);
+		Job deActivateStatus = jobService.deActiveJob(jobId);
 		
-		ResponseStructure<Internship> response = new ResponseStructure<>();
+		ResponseStructure<Job> response = new ResponseStructure<>();
 		
 		if (deActivateStatus != null) {
 			
 			response.setStatusCode(HttpStatus.OK.value());
-			response.setMsg("Internship Deactivated successfully !");
+			response.setMsg("Job Deactivated successfully !");
 			response.setData(deActivateStatus);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			
 			response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-			response.setMsg("Falied to deactivate internship !");
+			response.setMsg("Falied to deactivate job !");
 			response.setData(deActivateStatus);			
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
